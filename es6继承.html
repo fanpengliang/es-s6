@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        //生成SuperType实例时，会自动生成一个prototype。
+        //利用该prototype，定义“类”的函数（SuperType.prototype.getSuperValue）。
+        //  SuperType就是一个构造函数（constructor） 
+        function SuperType() {
+            this.prototype = true;
+        }
+        //SuperType的原型对象 property
+        SuperType.prototype.getSuperValue = function () {
+            return this.property;
+        }
+        //“子类”SubType构造时也生成一个prototype，
+        //但紧接着就将SubType.prototype指向SuperType的一个实例。
+        function SubType() {
+            this.subproperty = false;
+        }
+        //通过创建SuperType的实例继承了SuperType
+        SubType.prototype = new SuperType();
+
+        SubType.prototype.getSubValue = function () {
+            return this.subproperty;
+        }
+        var instance = new SubType();
+        alert(instance.getSuperValue());  //true
+        function SuperType() {
+            this.colors = ["red", "blue", "green"];
+        }
+        // function SubType() {
+        // }
+        //继承了SuperType
+        SubType.prototype = new SuperType();
+        var instance1 = new SubType();
+        // instance1.colors.push("black");
+        // alert(instance1.colors);   //red,blue,green,black
+
+        // var instance2 = new SubType();
+        // alert(instance2.colors);    //red,blue,green,black
+
+        // var instance3 = new SubType();
+        // alert(instance3.colors);
+
+        //用构造函数在子类型构造函数中向超类型(被继承的类)构造函数传递参数。
+        //构造函数使用继承
+        function SuperType() {
+            this.colors = ["red", "yellow", "pink"];
+        }
+        function SubType() {
+            SuperType.call(this);
+        }
+
+        var instance1 = new SubType();
+        instance1.colors.push("green");
+        alert(instance1.colors);
+
+        var instance2 = new SubType();
+        alert(instance2.colors);
+
+        function SuperType(name) {
+            this.name = name;
+        }
+        function SubType() {
+            //继承了supertype，同时还传了参数
+            SuperType.call(this, "大头");
+            //实力属性
+            this.age = 21;
+        }
+        var instance4 = new SubType();
+        alert(instance4.name);
+        alert(instance4.age);
+
+
+            //组合继承
+        function SuperType(name) {
+            this.name = name;
+            this.colors = ["red", "blue", "green"];
+        }
+    SuperType.prototype.sayName = function () {
+        alert(this.name);
+    };
+    function SubType(name, age) {
+        //继承属性    使用借用构造函数实现对实例属性的继承
+        SuperType.call(this, name);
+        this.age = age;
+    }
+    //继承方法     使用原型链实现
+    SubType.prototype = new SuperType();
+    SubType.prototype.constructor = SubType;
+    subType.prototype.sayAge = function () {
+        alert(this.age);
+    };
+    var instance1 = new SubType("mary", 22);
+    instance1.colors.push("black");
+    alert(instance1.colors);   //red,blue,green,black
+    instance1.sayName();  //mary
+    instance1.sayAge();  //22
+
+    var instance2 = new SubType("greg", 25);
+    alert(instance2.colors);   //red,blue,green
+    instance2.sayName();  //greg
+    instance2.sayAge();  //25 
+
+
+    </script>
+
+</body>
+
+</html>
